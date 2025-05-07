@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anagram Solver</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      color: #333;
+    }
+    input, button {
+      padding: 0.5rem;
+      margin: 0.5rem;
+      font-size: 1rem;
+    }
+    button:disabled {
+      background: #ccc;
+      color: #666;
+      cursor: not-allowed;
+    }
+    #results {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 0.2rem 0;
+    }
+    #easter-egg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.easter-egg-content {
+    background: linear-gradient(135deg, #6e3b3b, #3b4d6e);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    text-align: center;
+    max-width: 500px;
+    position: relative;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+.celebration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    opacity: 0.8;
+    animation: confetti-fall 5s linear infinite;
+}
+
+.confetti:nth-child(2n) {
+    background-color: #0f0;
+    animation-delay: 0.2s;
+}
+
+.confetti:nth-child(3n) {
+    background-color: #00f;
+    animation-delay: 0.4s;
+}
+
+.confetti:nth-child(4n) {
+    background-color: #ff0;
+    animation-delay: 0.6s;
+}
+
+.confetti:nth-child(5n) {
+    background-color: #f0f;
+    animation-delay: 0.8s;
+}
+
+@keyframes confetti-fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        left: calc(10% * var(--i, 1));
+    }
+    100% {
+        transform: translateY(400px) rotate(720deg);
+        left: calc(10% * var(--i, 1) + 20px);
+    }
+}
+
+#close-easter-egg {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+#close-easter-egg:hover {
+    background-color: #333;
+    color: #fff;
+}
+  </style>
+  <script>
+  console.log("Page starting to load");
+  window.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM fully loaded");
+  });
+</script>
+</head>
+<body>
+
+  <h1>Anagram Solver</h1>
+  <input type="text" id="inputWord" placeholder="Enter a word" />
+  <button id="findButton" onclick="findAnagrams()" disabled>Loading...</button>
+
+  <div id="results">
+    <h3>Results:</h3>
+    <ul id="anagramList"></ul>
+  </div>
+ <!-- # HTML (add to your template/base.html) -->
+
+<div id="easter-egg" class="hidden">
+    <div class="easter-egg-content">
+        <h2>YOU FOUND THE SECRET! 🎉</h2>
+        <p>Congratulations! You've activated the team's secret Easter egg!</p>
+        <div class="celebration">
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+            <div class="confetti"></div>
+        </div>
+        <button id="close-easter-egg">Close</button>
+    </div>
+</div>
+
+  <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+  // Your existing anagram solver code remains here
+  let dictionary = [];
+
+  async function loadWordList() {
+    const button = document.getElementById("findButton");
+    button.disabled = true;
+
+    try {
+      const response = await fetch("wordlist/words_dictionary.json");
+      if (!response.ok) throw new Error("Failed to load JSON file.");
+      const data = await response.json();
+      dictionary = Object.keys(data);
+      console.log(`Loaded ${dictionary.length} words from JSON.`);
+      button.disabled = false;
+      button.textContent = "Find Anagrams";
+    } catch (err) {
+      console.error("Error loading dictionary:", err);
+      button.textContent = "Load Failed";
+    }
+  }
+
+  function sortWord(word) {
+    return word.toLowerCase().split('').sort().join('');
+  }
+
+  function findAnagrams() {
+    const input = document.getElementById("inputWord").value.trim();
+    const sortedInput = sortWord(input);
+    const results = dictionary.filter(word =>
+      sortWord(word) === sortedInput && word.toLowerCase() !== input.toLowerCase()
+    );
+
+    const list = document.getElementById("anagramList");
+    list.innerHTML = '';
+    if (results.length === 0) {
+      list.innerHTML = '<li>No anagrams found.</li>';
+    } else {
+      results.forEach(word => {
+        const li = document.createElement("li");
+        li.textContent = word;
+        list.appendChild(li);
+      });
+    }
+  }
+  
+  window.addEventListener("load", loadWordList);
+
+  // UPDATED EASTER EGG CODE
+  // ----------------------
+  
+  // Konami Code sequence: ↑ ↑ ↓ ↓ ← → ← → B A
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 
+                     'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 
+                     'KeyB', 'KeyA'];
+  let konamiCodePosition = 0;
+  
+  // Debug mode - uncomment to see key presses in console
+  // document.addEventListener('keydown', function(e) {
+  //   console.log("Key pressed:", e.code);
+  // });
+  
+  // Listen for keydown events - moved outside DOMContentLoaded for better scope
+  document.addEventListener('keydown', function(e) {
+    // Get the key code from the event
+    const key = e.code;
+    
+    // Log for debugging - uncomment if needed
+    console.log(`Key: ${key}, Expected: ${konamiCode[konamiCodePosition]}, Position: ${konamiCodePosition}`);
+    
+    // Check if the key matches the next key in the sequence
+    const requiredKey = konamiCode[konamiCodePosition];
+    
+    if (key === requiredKey) {
+      // Move to the next key in the sequence
+      konamiCodePosition++;
+      
+      // If the entire sequence is completed
+      if (konamiCodePosition === konamiCode.length) {
+        // Reset the position
+        konamiCodePosition = 0;
+        
+        // Activate the Easter egg
+        activateEasterEgg();
+      }
+    } else {
+      // Reset if the key doesn't match
+      konamiCodePosition = 0;
+    }
+  });
+  
+  // Close button functionality
+  const closeButton = document.getElementById('close-easter-egg');
+  if (closeButton) {
+    closeButton.addEventListener('click', function() {
+      document.getElementById('easter-egg').classList.add('hidden');
+    });
+  }
+  
+  // Function to activate the Easter egg
+  function activateEasterEgg() {
+    console.log("Easter egg activated! 🎉");
+    
+    // Position the confetti elements randomly
+    const confettiElements = document.querySelectorAll('.confetti');
+    confettiElements.forEach((el, index) => {
+      el.style.setProperty('--i', index + 1);
+      el.style.left = `${Math.random() * 100}%`;
+    });
+    
+    // Show the Easter egg
+    const easterEgg = document.getElementById('easter-egg');
+    if (easterEgg) {
+      easterEgg.classList.remove('hidden');
+      
+      // Add a fun message to your anagram solver results instead of playing audio
+      const list = document.getElementById("anagramList");
+      if (list) {
+        list.innerHTML = '<li style="color: blue; font-weight: bold;">🎮 Konami Code Activated! 🎮</li>';
+        list.innerHTML += '<li style="color: green;">You found the secret easter egg!</li>';
+      }
+    } else {
+      console.error("Easter egg element not found");
+    }
+  }
+});
+  </script>
+</body>
+</html>
