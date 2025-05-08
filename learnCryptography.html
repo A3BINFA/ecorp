@@ -1,0 +1,704 @@
+ <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Functional History of Cryptography</title>
+		<style>
+			/* Body and general styles */
+			body {
+				font-family: sans-serif;
+				line-height: 1.6;
+				margin: 0; /* Remove default body margin */
+				padding: 0; /* Remove default body padding */
+				background-color: #f4f4f4;
+				color: #333;
+			}
+			.container {
+				max-width: 800px;
+				margin: 20px auto; /* Add margin back here */
+				background: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			}
+			h1,
+			h2,
+			h3 {
+				color: #0056b3;
+			}
+
+			/* Cipher section styles */
+			.cipher-section {
+				margin-bottom: 30px;
+				padding: 20px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+				background-color: #f9f9f9;
+			}
+			.challenge {
+				margin-top: 15px;
+				padding: 15px;
+				background-color: #e9ecef;
+				border: 1px dashed #ccc;
+				border-radius: 4px;
+			}
+
+			/* Text formatting */
+			.encrypted-text,
+			.decrypted-text {
+				/* Consider removing if not used */
+				font-family: "Courier New", Courier, monospace;
+				font-weight: bold;
+				background-color: #d1ecf1;
+				padding: 5px;
+				border-radius: 3px;
+				display: inline-block;
+				margin-bottom: 10px;
+				word-break: break-all;
+			}
+			.decrypted-text {
+				background-color: #d4edda;
+			}
+			code {
+				background-color: #eee;
+				padding: 2px 4px;
+				border-radius: 3px;
+				font-family: "Courier New", Courier, monospace;
+			}
+			.note {
+				font-style: italic;
+				color: #555;
+				font-size: 0.9em;
+				margin-top: 10px;
+			}
+
+			/* Interactive elements */
+			label {
+				display: block;
+				margin-top: 10px;
+				font-weight: bold;
+			}
+			input[type="text"],
+			input[type="number"],
+			textarea {
+				width: 95%;
+				padding: 8px;
+				margin-top: 5px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				font-size: 1em;
+				box-sizing: border-box; /* Include padding in width */
+			}
+			textarea {
+				min-height: 60px;
+				resize: vertical;
+			}
+			button {
+				display: inline-block;
+				padding: 10px 18px;
+				background-color: #28a745;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
+				margin: 10px 5px 0 0;
+				transition: background-color 0.2s ease;
+				font-size: 0.95em;
+			}
+			button:hover {
+				background-color: #218838;
+			}
+			button.decrypt-btn {
+				background-color: #dc3545;
+			}
+			button.decrypt-btn:hover {
+				background-color: #c82333;
+			}
+
+			/* Output area */
+			.output-area {
+				margin-top: 15px;
+				padding: 10px;
+				background-color: #f8f9fa;
+				border: 1px solid #dee2e6;
+				border-radius: 4px;
+				min-height: 40px;
+				word-wrap: break-word; /* Ensure long words wrap */
+				font-family: "Courier New", Courier, monospace; /* Good for output */
+			}
+			.output-area strong {
+				color: #0056b3;
+				font-family: sans-serif;
+			} /* Reset font for label */
+
+			/* Footer link styles */
+			.footer-crypto-links ul {
+				list-style-type: none;
+				padding-left: 0;
+				margin-top: 1em;
+				margin-bottom: 1em;
+				font-family: sans-serif;
+				font-size: 0.9em;
+				line-height: 1.5;
+			}
+			.footer-crypto-links li {
+				margin-bottom: 1em;
+			}
+			.footer-crypto-links li a {
+				font-weight: bold;
+				color: #0056b3;
+				text-decoration: none;
+				text-align: left;
+				/*display: inline; /* Keep link inline */
+				margin-bottom: 0; /* Not needed for inline */
+			}
+			.footer-crypto-links li a:hover {
+				text-decoration: underline;
+				color: #003d80;
+			}
+			.footer-crypto-links li .description {
+				display: inline; /* Keep description inline */
+				color: #555;
+				margin-left: 5px; /* Space between link and description */
+			}
+			footer {
+				margin-top: 30px;
+				padding-top: 20px;
+				border-top: 1px solid #ddd;
+				font-size: 0.9em;
+				color: #555;
+				text-align: left;
+			}
+			footer p {
+				margin-bottom: 0.5em;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>A Functional Journey Through Cryptography</h1>
+			<p>
+				Welcome! This interactive page explores the history of secret messages
+				using JavaScript to perform <strong>real</strong> encryption and
+				decryption for some classic ciphers.
+			</p>
+
+			<section class="cipher-section">
+				<h2>1. Ancient Rome: The Caesar Cipher</h2>
+				<p>
+					Used by Julius Caesar, this cipher shifts each letter by a fixed
+					number of places (the key). Try encrypting and decrypting your own
+					messages!
+				</p>
+				<div class="challenge">
+					<h3>Challenge 1: Implement Caesar Cipher</h3>
+					<label for="caesar-text">Text:</label>
+					<textarea
+						id="caesar-text"
+						rows="3"
+					>
+VENI VIDI VICI</textarea
+					>
+					<label for="caesar-shift">Shift (Key):</label>
+					<input
+						type="number"
+						id="caesar-shift"
+						value="3"
+						min="0"
+						max="25"
+					/>
+					<button onclick="runCaesar(true)">Encrypt</button>
+					<button
+						class="decrypt-btn"
+						onclick="runCaesar(false)"
+					>
+						Decrypt
+					</button>
+					<div class="output-area">
+						<strong>Result:</strong> <span id="caesar-output"></span>
+					</div>
+				</div>
+			</section>
+
+			<section class="cipher-section">
+				<h2>2. Beyond Caesar: Monoalphabetic Substitution</h2>
+				<p>
+					Each letter is consistently replaced by another letter according to a
+					secret key map. This example uses a fixed key for demonstration.
+				</p>
+				<p>
+					<strong>Fixed Key Used:</strong><br /><code
+						>A=Q, B=W, C=E, D=R, E=T, F=Y, G=U, H=I, I=O, J=P, K=A, L=S, M=D,
+						N=F, O=G, P=H, Q=J, R=K, S=L, T=Z, U=X, V=C, W=V, X=B, Y=N,
+						Z=M</code
+					>
+				</p>
+				<p class="note">
+					Implementing user-defined keys is possible but adds complexity.
+				</p>
+				<div class="challenge">
+					<h3>Challenge 2: Use Monoalphabetic Cipher</h3>
+					<label for="mono-text">Text:</label>
+					<textarea
+						id="mono-text"
+						rows="3"
+					>
+TO BE OR NOT TO BE</textarea
+					>
+					<button onclick="runMonoalphabetic(true)">Encrypt</button>
+					<button
+						class="decrypt-btn"
+						onclick="runMonoalphabetic(false)"
+					>
+						Decrypt
+					</button>
+					<div class="output-area">
+						<strong>Result:</strong> <span id="mono-output"></span>
+					</div>
+				</div>
+			</section>
+
+			<section class="cipher-section">
+				<h2>3. The "Unbreakable" Cipher: Vigenère</h2>
+				<p>
+					Uses a keyword to apply multiple Caesar shifts, making it resistant to
+					simple frequency analysis. Enter your text and a keyword.
+				</p>
+				<div class="challenge">
+					<h3>Challenge 3: Implement Vigenère Cipher</h3>
+					<label for="vigenere-text">Text:</label>
+					<textarea
+						id="vigenere-text"
+						rows="3"
+					>
+ATTACK AT DAWN</textarea
+					>
+					<label for="vigenere-key">Keyword:</label>
+					<input
+						type="text"
+						id="vigenere-key"
+						value="LEMON"
+					/>
+					<button onclick="runVigenere(true)">Encrypt</button>
+					<button
+						class="decrypt-btn"
+						onclick="runVigenere(false)"
+					>
+						Decrypt
+					</button>
+					<div class="output-area">
+						<strong>Result:</strong> <span id="vigenere-output"></span>
+					</div>
+				</div>
+			</section>
+
+			<section class="cipher-section">
+				<h2>4. Mechanical Marvels and the Digital Age</h2>
+				<p>
+					The Enigma machine (WWII) and modern algorithms like AES and RSA
+					represent further leaps in complexity. Implementing these accurately
+					requires specialized libraries and is beyond the scope of this simple
+					demonstration.
+				</p>
+				<p><strong>Key Concepts:</strong></p>
+				<ul>
+					<li>
+						<strong>Symmetric Key (AES):</strong> Same key for
+						encryption/decryption. Fast.
+					</li>
+					<li>
+						<strong>Asymmetric Key (RSA):</strong> Public key to encrypt,
+						private key to decrypt. Secure key exchange.
+					</li>
+				</ul>
+				<p class="note">
+					Modern cryptography relies on deep mathematical principles and
+					computational security.
+				</p>
+			</section>
+
+			<footer>
+				<p>
+					Experiment with the ciphers above! Notice how complexity increases.
+					Modern crypto secures our digital world.
+				</p>
+				<p><strong>References / More Information:</strong></p>
+				<div class="footer-crypto-links">
+					<ul>
+						<li>
+							<a
+								href="https://cryptohack.org/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>CryptoHack</a
+							><span class="description"
+								>: A free platform focused on learning modern cryptography
+								through interactive puzzles, challenges, and competitions.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://cryptopals.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Cryptopals Crypto Challenges</a
+							><span class="description"
+								>: Hands-on challenges where you implement and break various
+								ciphers to learn practical cryptographic concepts.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.coursera.org/courses?query=cryptography"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Coursera Cryptography Courses</a
+							><span class="description"
+								>: Offers structured cryptography courses from universities like
+								Stanford and Maryland. Includes popular courses like "<a
+									href="https://www.coursera.org/learn/crypto"
+									target="_blank"
+									rel="noopener noreferrer"
+									>Cryptography I</a
+								>".</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.edx.org/learn/cryptography"
+								target="_blank"
+								rel="noopener noreferrer"
+								>edX Cryptography Courses</a
+							><span class="description"
+								>: Provides access to cryptography courses and professional
+								certificates from various institutions.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://metana.io/blog/best-cryptography-courses-to-master-encryption-and-security/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Metana Cryptography Courses</a
+							><span class="description"
+								>: Lists several top online courses from platforms like
+								Coursera, Udemy, edX, and MIT OpenCourseWare.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://crypto.stackexchange.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Cryptography Stack Exchange</a
+							><span class="description"
+								>: A question-and-answer site for cryptography researchers,
+								students, and professionals.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.reddit.com/r/cryptography/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Reddit r/cryptography</a
+							><span class="description"
+								>: A subreddit for discussions, news, and learning resources
+								related to cryptography.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.iacr.org/publications/eprint/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>IACR ePrint Archive</a
+							><span class="description"
+								>: Provides access to cutting-edge research papers in
+								cryptography.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.garykessler.net/library/crypto.html"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Gary Kessler's Cryptography Overview</a
+							><span class="description"
+								>: A very broad and in-depth overview site covering numerous
+								cryptographic algorithms and protocols.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/sobolevn/awesome-cryptography"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Awesome Cryptography (GitHub)</a
+							><span class="description"
+								>: A curated list of cryptography resources, libraries, tools,
+								and links.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/pFarb/awesome-crypto-papers"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Awesome Crypto Papers (GitHub)</a
+							><span class="description"
+								>: A curated list focusing specifically on important
+								cryptography papers, articles, and tutorials.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://csrc.nist.gov/projects/cryptographic-standards-and-guidelines"
+								target="_blank"
+								rel="noopener noreferrer"
+								>NIST Computer Security Resource Center (CSRC)</a
+							><span class="description"
+								>: The official source for cryptographic standards (like AES,
+								SHA) and guidelines.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/openssl/openssl"
+								target="_blank"
+								rel="noopener noreferrer"
+								>OpenSSL</a
+							><span class="description"
+								>: A widely used open-source software library for TLS/SSL and
+								various cryptographic functions.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/google/tink"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Google Tink</a
+							><span class="description"
+								>: A multi-language, cross-platform library providing secure and
+								easy-to-use cryptographic APIs.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://github.com/jedisct1/libsodium"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Libsodium</a
+							><span class="description"
+								>: A modern and easy-to-use software library for encryption,
+								decryption, signatures, password hashing, and more.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.cryptool.org/en/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>CrypTool</a
+							><span class="description"
+								>: Free, open-source e-learning software illustrating
+								cryptographic and cryptanalytic concepts.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://blog.cryptographyengineering.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>A Few Thoughts on Cryptographic Engineering</a
+							><span class="description"
+								>: A well-respected blog covering practical aspects of
+								cryptography and security engineering.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.schneier.com/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Schneier on Security</a
+							><span class="description"
+								>: Leading resource on security, privacy, and related
+								cryptographic issues by Bruce Schneier.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://www.cryptologie.net/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Cryptologie</a
+							><span class="description"
+								>: Blog by David Wong discussing various cryptography
+								topics.</span
+							>
+						</li>
+						<li>
+							<a
+								href="https://soatok.blog/tag/cryptography/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Dhole Moments</a
+							><span class="description"
+								>: Blog covering cryptography and security topics, often with
+								practical code examples.</span
+							>
+						</li>
+					</ul>
+				</div>
+				<p>
+					Brought to you by
+					<a
+						href="https://www.riteupai.com"
+						target="_blank"
+						rel="noopener noreferrer"
+						>RiteUpAI</a
+					>
+				</p>
+			</footer>
+		</div>
+		<script>
+			// --- Caesar Cipher Logic ---
+			function caesarCipher(text, shift, encrypt) {
+				// Ensure shift is handled correctly for decryption
+				const actualShift = encrypt ? shift : 26 - shift;
+				let result = "";
+				for (let i = 0; i < text.length; i++) {
+					let char = text[i];
+					if (char.match(/[a-z]/i)) {
+						// Check if it's a letter
+						let code = text.charCodeAt(i);
+						let base = code >= 65 && code <= 90 ? 65 : 97; // Uppercase base (A=65) or lowercase base (a=97)
+						let shiftedCode = base + ((code - base + actualShift) % 26); // Calculate shifted code with wrap-around
+						result += String.fromCharCode(shiftedCode);
+					} else {
+						result += char; // Keep non-letters unchanged
+					}
+				}
+				return result;
+			}
+
+			function runCaesar(encrypt) {
+				const text = document.getElementById("caesar-text").value;
+				const shiftInput = document.getElementById("caesar-shift");
+				const outputSpan = document.getElementById("caesar-output");
+				const shift = parseInt(shiftInput.value);
+
+				// Validate shift value
+				if (isNaN(shift) || shift < 0 || shift > 25) {
+					alert("Please enter a shift value between 0 and 25.");
+					outputSpan.textContent = "Invalid shift value."; // Provide feedback in output area
+					return; // Stop execution
+				}
+
+				// Perform encryption/decryption and display result
+				const result = caesarCipher(text, shift, encrypt);
+				outputSpan.textContent = result; // Use textContent for security
+			}
+
+			// --- Monoalphabetic Cipher Logic ---
+			const monoKeyMap = {
+				A: "Q",
+				B: "W",
+				C: "E",
+				D: "R",
+				E: "T",
+				F: "Y",
+				G: "U",
+				H: "I",
+				I: "O",
+				J: "P",
+				K: "A",
+				L: "S",
+				M: "D",
+				N: "F",
+				O: "G",
+				P: "H",
+				Q: "J",
+				R: "K",
+				S: "L",
+				T: "Z",
+				U: "X",
+				V: "C",
+				W: "V",
+				X: "B",
+				Y: "N",
+				Z: "M",
+			};
+			// Create the reverse map for decryption automatically
+			const monoReverseMap = {};
+			for (const key in monoKeyMap) {
+				monoReverseMap[monoKeyMap[key]] = key;
+			}
+
+			function monoalphabeticCipher(text, encrypt) {
+				const key = encrypt ? monoKeyMap : monoReverseMap;
+				let result = "";
+				text = text.toUpperCase(); // Standardize case for this fixed key
+				for (let i = 0; i < text.length; i++) {
+					let char = text[i];
+					result += key[char] || char; // Use mapped char or original if not a letter in the key
+				}
+				return result;
+			}
+
+			function runMonoalphabetic(encrypt) {
+				const text = document.getElementById("mono-text").value;
+				const outputSpan = document.getElementById("mono-output");
+				const result = monoalphabeticCipher(text, encrypt);
+				outputSpan.textContent = result;
+			}
+
+			// --- Vigenere Cipher Logic ---
+			function vigenereCipher(text, key, encrypt) {
+				key = key.toUpperCase().replace(/[^A-Z]/g, ""); // Sanitize key: uppercase, letters only
+				if (key.length === 0) return "Error: Keyword must contain letters.";
+
+				let result = "";
+				let keyIndex = 0;
+				for (let i = 0; i < text.length; i++) {
+					let char = text[i];
+					if (char.match(/[a-z]/i)) {
+						// Process only letters
+						let textCode = text.charCodeAt(i);
+						let textBase = textCode >= 65 && textCode <= 90 ? 65 : 97; // Handle upper/lower case of text
+						let keyShift = key.charCodeAt(keyIndex % key.length) - 65; // Get shift amount (0-25) from key
+						let shift = encrypt ? keyShift : 26 - keyShift; // Adjust shift for decryption
+
+						let shiftedCode = textBase + ((textCode - textBase + shift) % 26); // Apply shift with wrap-around
+						result += String.fromCharCode(shiftedCode);
+						keyIndex++; // Only advance key index for letters processed
+					} else {
+						result += char; // Keep non-letters unchanged
+					}
+				}
+				return result;
+			}
+
+			function runVigenere(encrypt) {
+				const text = document.getElementById("vigenere-text").value;
+				const key = document.getElementById("vigenere-key").value;
+				const outputSpan = document.getElementById("vigenere-output");
+
+				// Basic key validation
+				if (!key || !key.match(/[a-zA-Z]/)) {
+					outputSpan.textContent = "Error: Keyword must contain letters.";
+					return;
+				}
+
+				const result = vigenereCipher(text, key, encrypt);
+				outputSpan.textContent = result;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,535 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive RAG Explainer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        h2 { border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 30px; }
+        h3 { margin-top: 20px; color: #34495e; }
+
+        textarea, input[type="text"] {
+            width: calc(100% - 22px); /* Account for padding and border */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        textarea { min-height: 100px; resize: vertical; }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }
+
+        /* Pipeline Visualizer */
+        #pipeline-visualizer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        .pipeline-step {
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: #ccc;
+            color: #555;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            flex: 1;
+            margin: 0 5px;
+        }
+        .pipeline-step.active-step {
+            background-color: #27ae60; /* Green */
+            color: white;
+            transform: scale(1.05);
+        }
+        .pipeline-arrow {
+            font-size: 1.5em;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* Indexing Display */
+        .text-display-box, .list-display-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 50px;
+            background-color: #fdfdfd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        #original-text-interactive .document-segment {
+            cursor: default;
+            transition: background-color 0.2s;
+            padding: 1px 0; /* For better hover indication */
+            margin-right: 2px; /* Space out segments a bit */
+        }
+        .document-segment.highlighted, .index-entry.highlighted {
+            background-color: #f1c40f; /* Yellow */
+            color: #333;
+        }
+        .index-entry {
+            padding: 5px;
+            border-bottom: 1px dashed #eee;
+            cursor: default;
+            transition: background-color 0.2s;
+        }
+        .index-entry:last-child { border-bottom: none; }
+
+        /* Retrieval Display */
+        .retrieved-chunk {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .retrieved-chunk.context-window-item {
+            border-left: 5px solid #3498db; /* Blue border for context */
+            background-color: #eaf5ff;
+        }
+        .score-bar-container {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        .score-bar {
+            height: 100%;
+            background-color: #2ecc71; /* Green bar */
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+        .retrieved-chunk p { margin: 5px 0; }
+
+        /* Generation Display */
+        #generation-output {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-left: 5px solid #9b59b6; /* Purple for LLM */
+            border-radius: 4px;
+            white-space: pre-wrap; /* Preserve formatting */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #pipeline-visualizer {
+                flex-direction: column;
+            }
+            .pipeline-step {
+                margin: 5px 0;
+                width: 100%;
+            }
+            .pipeline-arrow {
+                transform: rotate(90deg);
+                margin: 5px 0;
+            }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.5em; }
+            h3 { font-size: 1.2em; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 15px; }
+            textarea, input[type="text"], button { font-size: 0.9em; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive RAG Explainer</h1>
+        <p>Learn the basics of Retrieval Augmented Generation (RAG) by interacting with each step of the pipeline.</p>
+
+        <!-- Overall Pipeline -->
+        <div id="pipeline-visualizer">
+            <div class="pipeline-step" id="pipeline-step-input">1. Input Data</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step" id="pipeline-step-indexing">2. Indexing</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step" id="pipeline-step-retrieval">3. Retrieval</div>
+            <div class="pipeline-arrow">&rarr;</div>
+            <div class="pipeline-step" id="pipeline-step-generation">4. Generation</div>
+        </div>
+
+        <!-- 1. Data Input -->
+        <div class="section" id="data-input-section">
+            <h2>1. Document Store Input</h2>
+            <p>Enter the text you want to use as your knowledge base. This will be indexed for retrieval.</p>
+            <textarea id="document-text" placeholder="Paste your document text here..."></textarea>
+            <button id="index-button">Index Document</button>
+        </div>
+
+        <!-- 2. Indexing Display -->
+        <div class="section" id="indexing-display-section" style="display: none;">
+            <h2>2. Indexing</h2>
+            <p>The document is broken down into smaller chunks (e.g., sentences or paragraphs). Hover over a segment in the 'Original Document' or an 'Index Entry' to see its counterpart highlighted.</p>
+            <h3>Original Document (Interactive Segments)</h3>
+            <div id="original-text-interactive" class="text-display-box"></div>
+            <h3>Index Entries (Chunks)</h3>
+            <div id="index-entries-list" class="list-display-box"></div>
+        </div>
+
+        <!-- 3. Question Input -->
+        <div class="section" id="question-input-section" style="display: none;">
+            <h2>3. Ask a Question</h2>
+            <p>Type a question related to the indexed document.</p>
+            <input type="text" id="question-input" placeholder="Enter your question here...">
+            <button id="ask-button">Ask Question & Retrieve</button>
+        </div>
+
+        <!-- 4. Retrieval and Ranking Display -->
+        <div class="section" id="retrieval-display-section" style="display: none;">
+            <h2>4. Retrieval & Ranking</h2>
+            <p>Index entries are retrieved and ranked based on their relevance to your question. The top-ranked chunks (e.g., top 3) form the 'context window' for the LLM.</p>
+            <div id="retrieved-chunks-list" class="list-display-box"></div>
+        </div>
+        
+        <!-- 5. Generation Step -->
+        <div class="section" id="generation-display-section" style="display: none;">
+            <h2>5. Generation (Simulated)</h2>
+            <p>The LLM uses the retrieved context to formulate an answer.</p>
+            <div id="generation-output"></div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const CONTEXT_WINDOW_SIZE = 3;
+
+            // DOM Elements
+            const documentTextInput = document.getElementById('document-text');
+            const indexButton = document.getElementById('index-button');
+            
+            const indexingDisplaySection = document.getElementById('indexing-display-section');
+            const originalTextInteractive = document.getElementById('original-text-interactive');
+            const indexEntriesList = document.getElementById('index-entries-list');
+
+            const questionInputSection = document.getElementById('question-input-section');
+            const questionInput = document.getElementById('question-input');
+            const askButton = document.getElementById('ask-button');
+
+            const retrievalDisplaySection = document.getElementById('retrieval-display-section');
+            const retrievedChunksList = document.getElementById('retrieved-chunks-list');
+
+            const generationDisplaySection = document.getElementById('generation-display-section');
+            const generationOutput = document.getElementById('generation-output');
+
+            const pipelineSteps = {
+                input: document.getElementById('pipeline-step-input'),
+                indexing: document.getElementById('pipeline-step-indexing'),
+                retrieval: document.getElementById('pipeline-step-retrieval'),
+                generation: document.getElementById('pipeline-step-generation')
+            };
+
+            let indexedChunks = []; // Array of { id: string, text: string }
+
+            // --- Pipeline Visualizer ---
+            function updatePipelineVisual(activeStage) {
+                Object.values(pipelineSteps).forEach(step => step.classList.remove('active-step'));
+                if (pipelineSteps[activeStage]) {
+                    pipelineSteps[activeStage].classList.add('active-step');
+                }
+            }
+            updatePipelineVisual('input'); // Initial state
+
+            // --- 1. Indexing ---
+            indexButton.addEventListener('click', handleIndexDocument);
+
+            function handleIndexDocument() {
+                const text = documentTextInput.value.trim();
+                if (!text) {
+                    alert("Please enter some text for the document store.");
+                    return;
+                }
+
+                clearPreviousResults(true, true, true); // Clear all subsequent stages
+                performIndexing(text);
+                
+                indexingDisplaySection.style.display = 'block';
+                questionInputSection.style.display = 'block';
+                askButton.disabled = false;
+                questionInput.value = '';
+                
+                updatePipelineVisual('indexing');
+                document.getElementById('question-input').focus();
+            }
+
+            function performIndexing(text) {
+                // Simple sentence splitting. A more robust splitter might be needed for complex texts.
+                const sentences = text.split(/(?<=[.!?])\s+/g)
+                                    .map(s => s.trim())
+                                    .filter(s => s.length > 0);
+
+                indexedChunks = [];
+                originalTextInteractive.innerHTML = '';
+                indexEntriesList.innerHTML = '';
+
+                sentences.forEach((sentence, i) => {
+                    const chunkId = `chunk-${i}`;
+                    indexedChunks.push({ id: chunkId, text: sentence });
+
+                    // Display in original text view
+                    const span = document.createElement('span');
+                    span.id = `orig-${chunkId}`;
+                    span.textContent = sentence + ' '; // Add space for visual separation
+                    span.dataset.chunkId = chunkId;
+                    span.classList.add('document-segment');
+                    originalTextInteractive.appendChild(span);
+
+                    // Display in index entries list
+                    const entryDiv = document.createElement('div');
+                    entryDiv.classList.add('index-entry');
+                    entryDiv.dataset.chunkId = chunkId;
+                    entryDiv.textContent = sentence;
+                    indexEntriesList.appendChild(entryDiv);
+                });
+                addHighlightListeners();
+            }
+
+            function addHighlightListeners() {
+                const segments = document.querySelectorAll('.document-segment, .index-entry');
+                segments.forEach(el => {
+                    el.addEventListener('mouseenter', handleHover);
+                    el.addEventListener('mouseleave', handleHoverOut);
+                });
+            }
+
+            function handleHover(e) {
+                const chunkId = e.target.dataset.chunkId;
+                if (!chunkId) return;
+                highlightElements(chunkId, true);
+            }
+
+            function handleHoverOut(e) {
+                const chunkId = e.target.dataset.chunkId;
+                if (!chunkId) return;
+                highlightElements(chunkId, false);
+            }
+            
+            function highlightElements(chunkId, addHighlight) {
+                const originalSegment = document.getElementById(`orig-${chunkId}`);
+                const indexEntry = document.querySelector(`.index-entry[data-chunk-id="${chunkId}"]`);
+                
+                if (originalSegment) {
+                    addHighlight ? originalSegment.classList.add('highlighted') : originalSegment.classList.remove('highlighted');
+                }
+                if (indexEntry) {
+                     addHighlight ? indexEntry.classList.add('highlighted') : indexEntry.classList.remove('highlighted');
+                }
+            }
+
+
+            // --- 2. Retrieval & Ranking ---
+            askButton.addEventListener('click', handleAskQuestion);
+
+            function handleAskQuestion() {
+                const question = questionInput.value.trim();
+                if (!question) {
+                    alert("Please enter a question.");
+                    return;
+                }
+                if (indexedChunks.length === 0) {
+                    alert("Please index a document first.");
+                    return;
+                }
+
+                clearPreviousResults(false, true, true); // Clear retrieval and generation
+
+                const rankedChunks = performRetrieval(question, indexedChunks);
+                displayRetrievedChunks(rankedChunks);
+                
+                retrievalDisplaySection.style.display = 'block';
+                updatePipelineVisual('retrieval');
+
+                // Simulate generation immediately after retrieval for this demo
+                const contextWindow = rankedChunks.slice(0, CONTEXT_WINDOW_SIZE);
+                simulateGeneration(contextWindow, question);
+                generationDisplaySection.style.display = 'block';
+                // No distinct visual step for generation start, but will update when "done"
+            }
+
+            function calculateSimilarity(query, text) {
+                // Simple word overlap score
+                const queryWords = new Set(query.toLowerCase().match(/\b\w+\b/g) || []);
+                const textWords = new Set(text.toLowerCase().match(/\b\w+\b/g) || []);
+                
+                if (queryWords.size === 0 || textWords.size === 0) return 0;
+
+                let intersectionSize = 0;
+                queryWords.forEach(word => {
+                    if (textWords.has(word)) {
+                        intersectionSize++;
+                    }
+                });
+                // Jaccard Index: intersection / union
+                // const unionSize = queryWords.size + textWords.size - intersectionSize;
+                // return unionSize === 0 ? 0 : intersectionSize / unionSize;
+                
+                // For more intuitive scores in a demo, let's use simple overlap count normalized by query length
+                 return intersectionSize / queryWords.size; // Score from 0 to 1
+            }
+
+            function performRetrieval(question, chunks) {
+                const scoredChunks = chunks.map(chunk => ({
+                    ...chunk,
+                    score: calculateSimilarity(question, chunk.text)
+                }));
+                
+                scoredChunks.sort((a, b) => b.score - a.score); // Sort descending by score
+                return scoredChunks;
+            }
+
+            function displayRetrievedChunks(rankedChunks) {
+                retrievedChunksList.innerHTML = '';
+                if (rankedChunks.length === 0) {
+                    retrievedChunksList.innerHTML = '<p>No relevant chunks found.</p>';
+                    return;
+                }
+
+                const maxScore = rankedChunks[0].score > 0 ? rankedChunks[0].score : 1; // Avoid division by zero if all scores are 0
+
+                rankedChunks.forEach((chunk, index) => {
+                    const div = document.createElement('div');
+                    div.classList.add('retrieved-chunk');
+                    if (index < CONTEXT_WINDOW_SIZE && chunk.score > 0) { // Only add to context if score is positive
+                        div.classList.add('context-window-item');
+                    }
+
+                    const textP = document.createElement('p');
+                    textP.innerHTML = `<strong>Text:</strong> <span class="chunk-text">${chunk.text}</span>`;
+                    
+                    const scoreP = document.createElement('p');
+                    scoreP.innerHTML = `<strong>Relevance Score:</strong> <span class="score-value">${chunk.score.toFixed(2)}</span>`;
+                    
+                    const scoreBarContainer = document.createElement('div');
+                    scoreBarContainer.classList.add('score-bar-container');
+                    const scoreBar = document.createElement('div');
+                    scoreBar.classList.add('score-bar');
+                    // Normalize bar width against the max score achieved for better visual differentiation
+                    // or cap at 100% if score is 1 (max possible from current similarity)
+                    const barWidth = chunk.score > 0 ? (chunk.score / maxScore) * 100 : 0;
+                    scoreBar.style.width = `${Math.min(barWidth, 100)}%`;
+
+
+                    div.appendChild(textP);
+                    div.appendChild(scoreP);
+                    div.appendChild(scoreBarContainer);
+                    scoreBarContainer.appendChild(scoreBar);
+                    retrievedChunksList.appendChild(div);
+                });
+            }
+
+            // --- 3. Generation (Simulated) ---
+            function simulateGeneration(contextWindow, question) {
+                let outputMessage = `Simulating LLM Generation for question: "${question}"\n\n`;
+                if (contextWindow.length > 0 && contextWindow.some(c => c.score > 0)) {
+                    const validContext = contextWindow.filter(c => c.score > 0);
+                    outputMessage += `The LLM has received the following top ${validContext.length} relevant chunk(s) as context:\n`;
+                    validContext.forEach((chunk, i) => {
+                        outputMessage += `\n[Context Chunk ${i+1} - Score: ${chunk.score.toFixed(2)}]:\n"${chunk.text}"`;
+                    });
+                    outputMessage += "\n\nAn LLM would now synthesize this information to generate a comprehensive answer.";
+                } else {
+                    outputMessage += "No relevant context was found or provided to the LLM. The LLM would attempt to answer based on its general knowledge, or indicate it cannot answer without specific context.";
+                }
+                generationOutput.textContent = outputMessage;
+                updatePipelineVisual('generation'); // Mark generation as the final active step
+            }
+
+            // --- Utility: Clear Results ---
+            function clearPreviousResults(indexing, retrieval, generation) {
+                if (indexing) {
+                    originalTextInteractive.innerHTML = '';
+                    indexEntriesList.innerHTML = '';
+                    indexedChunks = [];
+                    indexingDisplaySection.style.display = 'none';
+                    questionInputSection.style.display = 'none'; // Hide question if re-indexing
+                    askButton.disabled = true;
+                }
+                if (retrieval) {
+                    retrievedChunksList.innerHTML = '';
+                    retrievalDisplaySection.style.display = 'none';
+                }
+                if (generation) {
+                    generationOutput.textContent = '';
+                    generationDisplaySection.style.display = 'none';
+                }
+                if (!indexing && !retrieval && !generation) { // Full reset implied
+                     updatePipelineVisual('input');
+                }
+            }
+
+            // Initial setup
+            askButton.disabled = true; // Disabled until document is indexed
+        });
+    </script>
+</body>
+</html>
+
+
+/*Build an interactive web app to help a learner understand the key concepts and workflow of Retrieval Augmented Generation (RAG). RAG is a technique used to combine custom data with Large Language Models (LLMs) to provide more informed and contextually relevant answers. The app should focus on the basic RAG pipeline: Indexing, Retrieval, and Generation.
+
+SPECIFICATIONS:
+
+1.  Data Input: The app should provide an interface for the user to input a body of text (the 'document store'). This could be a simple text area.
+2.  Indexing Display: The app will display a simple representation of how the inputted text is indexed. This representation should be interactive such that hovering over a word or phrase in the original text highlights its corresponding index entry.
+3.  Question Input: The app must feature an input field where the user can type a question. 
+4.  Retrieval and Ranking: Upon submitting a question, the app should simulate the retrieval process. All the index entries should be displayed, ranked by their relevance (similarity score) to the question.  This can be a simple numerical score or a visual representation like a colored bar (darker color = higher relevance).
+5. Context Window: The highest-ranking index entries (e.g., top 3) are designated as the 'context window'. Visually differentiate the context window items from the rest of the list (e.g., border, background color).
+6.  Generation Step: The app must simulate the generation step by displaying a text box with a message. The text box should state that the LLM has incorporated the context into its response. (An actual response will not be generated.)
+7. Overall Pipeline: Visualize the overall RAG pipeline, highlighting the current stage (e.g., using color or animation). Show the flow of information from the document store through indexing, retrieval, and finally to the LLM for generation.
+
+The app must be fully responsive and function properly on both desktop and mobile. Provide the code as a single, self-contained HTML document. All styles and scripts must be inline. In the result, encase the code between "```" and "```" for easy parsing.
+*/

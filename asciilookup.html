@@ -1,0 +1,1499 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Lookup Table</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #0f111a;
+            color: #00ffcc;
+            margin: 0;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            color: #00ffee;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            background-color: #1e1e2f;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #00ffcc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #1f222e;
+        }
+        tr:nth-child(even) {
+            background-color: #1a1d29;
+        }
+        tr:hover {
+            background-color: #263238;
+        }
+    </style>
+</head>
+<body>
+    <h1>ASCII & Binary Lookup Table</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Search by character, description...">
+    </div>
+    <table id="lookupTable">
+        <thead>
+            <tr>
+                <th>Decimal</th>
+                <th>Hex</th>
+                <th>Binary</th>
+                <th>Character</th>
+                <th>Keyboard Input</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>0</td>
+                <td>00</td>
+                <td>00000000</td>
+                <td>NULL</td>
+                <td><0x00></td>
+                <td>Null character</td>
+            </tr>
+    
+            <tr>
+                <td>1</td>
+                <td>01</td>
+                <td>00000001</td>
+                <td>SOH</td>
+                <td><0x01></td>
+                <td>Start of Heading</td>
+            </tr>
+    
+            <tr>
+                <td>2</td>
+                <td>02</td>
+                <td>00000010</td>
+                <td>STX</td>
+                <td><0x02></td>
+                <td>Start of Text</td>
+            </tr>
+    
+            <tr>
+                <td>3</td>
+                <td>03</td>
+                <td>00000011</td>
+                <td>ETX</td>
+                <td><0x03></td>
+                <td>End of Text</td>
+            </tr>
+    
+            <tr>
+                <td>4</td>
+                <td>04</td>
+                <td>00000100</td>
+                <td>EOT</td>
+                <td><0x04></td>
+                <td>End of Transmission</td>
+            </tr>
+    
+            <tr>
+                <td>5</td>
+                <td>05</td>
+                <td>00000101</td>
+                <td>ENQ</td>
+                <td><0x05></td>
+                <td>Enquiry</td>
+            </tr>
+    
+            <tr>
+                <td>6</td>
+                <td>06</td>
+                <td>00000110</td>
+                <td>ACK</td>
+                <td><0x06></td>
+                <td>Acknowledge</td>
+            </tr>
+    
+            <tr>
+                <td>7</td>
+                <td>07</td>
+                <td>00000111</td>
+                <td>BEL</td>
+                <td><0x07></td>
+                <td>Bell (audible alarm)</td>
+            </tr>
+    
+            <tr>
+                <td>8</td>
+                <td>08</td>
+                <td>00001000</td>
+                <td>BS</td>
+                <td><0x08></td>
+                <td>Backspace</td>
+            </tr>
+    
+            <tr>
+                <td>9</td>
+                <td>09</td>
+                <td>00001001</td>
+                <td>HT</td>
+                <td><0x09></td>
+                <td>Horizontal Tab</td>
+            </tr>
+    
+            <tr>
+                <td>10</td>
+                <td>0A</td>
+                <td>00001010</td>
+                <td>LF</td>
+                <td><0x0A></td>
+                <td>Line Feed (newline)</td>
+            </tr>
+    
+            <tr>
+                <td>11</td>
+                <td>0B</td>
+                <td>00001011</td>
+                <td>VT</td>
+                <td><0x0B></td>
+                <td>Vertical Tab</td>
+            </tr>
+    
+            <tr>
+                <td>12</td>
+                <td>0C</td>
+                <td>00001100</td>
+                <td>FF</td>
+                <td><0x0C></td>
+                <td>Form Feed (page break)</td>
+            </tr>
+    
+            <tr>
+                <td>13</td>
+                <td>0D</td>
+                <td>00001101</td>
+                <td>CR</td>
+                <td><0x0D></td>
+                <td>Carriage Return</td>
+            </tr>
+    
+            <tr>
+                <td>14</td>
+                <td>0E</td>
+                <td>00001110</td>
+                <td>SO</td>
+                <td><0x0E></td>
+                <td>Shift Out</td>
+            </tr>
+    
+            <tr>
+                <td>15</td>
+                <td>0F</td>
+                <td>00001111</td>
+                <td>SI</td>
+                <td><0x0F></td>
+                <td>Shift In</td>
+            </tr>
+    
+            <tr>
+                <td>16</td>
+                <td>10</td>
+                <td>00010000</td>
+                <td>DLE</td>
+                <td><0x10></td>
+                <td>Data Link Escape</td>
+            </tr>
+    
+            <tr>
+                <td>17</td>
+                <td>11</td>
+                <td>00010001</td>
+                <td>DC1</td>
+                <td><0x11></td>
+                <td>Device Control 1</td>
+            </tr>
+    
+            <tr>
+                <td>18</td>
+                <td>12</td>
+                <td>00010010</td>
+                <td>DC2</td>
+                <td><0x12></td>
+                <td>Device Control 2</td>
+            </tr>
+    
+            <tr>
+                <td>19</td>
+                <td>13</td>
+                <td>00010011</td>
+                <td>DC3</td>
+                <td><0x13></td>
+                <td>Device Control 3</td>
+            </tr>
+    
+            <tr>
+                <td>20</td>
+                <td>14</td>
+                <td>00010100</td>
+                <td>DC4</td>
+                <td><0x14></td>
+                <td>Device Control 4</td>
+            </tr>
+    
+            <tr>
+                <td>21</td>
+                <td>15</td>
+                <td>00010101</td>
+                <td>NAK</td>
+                <td><0x15></td>
+                <td>Negative Acknowledge</td>
+            </tr>
+    
+            <tr>
+                <td>22</td>
+                <td>16</td>
+                <td>00010110</td>
+                <td>SYN</td>
+                <td><0x16></td>
+                <td>Synchronous Idle</td>
+            </tr>
+    
+            <tr>
+                <td>23</td>
+                <td>17</td>
+                <td>00010111</td>
+                <td>ETB</td>
+                <td><0x17></td>
+                <td>End of Transmission Block</td>
+            </tr>
+    
+            <tr>
+                <td>24</td>
+                <td>18</td>
+                <td>00011000</td>
+                <td>CAN</td>
+                <td><0x18></td>
+                <td>Cancel</td>
+            </tr>
+    
+            <tr>
+                <td>25</td>
+                <td>19</td>
+                <td>00011001</td>
+                <td>EM</td>
+                <td><0x19></td>
+                <td>End of Medium</td>
+            </tr>
+    
+            <tr>
+                <td>26</td>
+                <td>1A</td>
+                <td>00011010</td>
+                <td>SUB</td>
+                <td><0x1A></td>
+                <td>Substitute</td>
+            </tr>
+    
+            <tr>
+                <td>27</td>
+                <td>1B</td>
+                <td>00011011</td>
+                <td>ESC</td>
+                <td><0x1B></td>
+                <td>Escape</td>
+            </tr>
+    
+            <tr>
+                <td>28</td>
+                <td>1C</td>
+                <td>00011100</td>
+                <td>FS</td>
+                <td><0x1C></td>
+                <td>File Separator</td>
+            </tr>
+    
+            <tr>
+                <td>29</td>
+                <td>1D</td>
+                <td>00011101</td>
+                <td>GS</td>
+                <td><0x1D></td>
+                <td>Group Separator</td>
+            </tr>
+    
+            <tr>
+                <td>30</td>
+                <td>1E</td>
+                <td>00011110</td>
+                <td>RS</td>
+                <td><0x1E></td>
+                <td>Record Separator</td>
+            </tr>
+    
+            <tr>
+                <td>31</td>
+                <td>1F</td>
+                <td>00011111</td>
+                <td>US</td>
+                <td><0x1F></td>
+                <td>Unit Separator</td>
+            </tr>
+    
+            <tr>
+                <td>32</td>
+                <td>20</td>
+                <td>00100000</td>
+                <td>Space</td>
+                <td>" "</td>
+                <td>Space character</td>
+            </tr>
+    
+            <tr>
+                <td>33</td>
+                <td>21</td>
+                <td>00100001</td>
+                <td>!</td>
+                <td>Shift+1</td>
+                <td>Exclamation mark</td>
+            </tr>
+    
+            <tr>
+                <td>34</td>
+                <td>22</td>
+                <td>00100010</td>
+                <td>"</td>
+                <td>Shift+'"</td>
+                <td>Quotation mark</td>
+            </tr>
+    
+            <tr>
+                <td>35</td>
+                <td>23</td>
+                <td>00100011</td>
+                <td>#</td>
+                <td>Shift+3</td>
+                <td>Number sign (hash)</td>
+            </tr>
+    
+            <tr>
+                <td>36</td>
+                <td>24</td>
+                <td>00100100</td>
+                <td>$</td>
+                <td>Shift+4</td>
+                <td>Dollar sign</td>
+            </tr>
+    
+            <tr>
+                <td>37</td>
+                <td>25</td>
+                <td>00100101</td>
+                <td>%</td>
+                <td>Shift+5</td>
+                <td>Percent sign</td>
+            </tr>
+    
+            <tr>
+                <td>38</td>
+                <td>26</td>
+                <td>00100110</td>
+                <td>&</td>
+                <td>Shift+7</td>
+                <td>Ampersand</td>
+            </tr>
+    
+            <tr>
+                <td>39</td>
+                <td>27</td>
+                <td>00100111</td>
+                <td>'</td>
+                <td>"'"</td>
+                <td>Apostrophe (single quote)</td>
+            </tr>
+    
+            <tr>
+                <td>40</td>
+                <td>28</td>
+                <td>00101000</td>
+                <td>(</td>
+                <td>Shift+9</td>
+                <td>Left parenthesis</td>
+            </tr>
+    
+            <tr>
+                <td>41</td>
+                <td>29</td>
+                <td>00101001</td>
+                <td>)</td>
+                <td>Shift+0</td>
+                <td>Right parenthesis</td>
+            </tr>
+    
+            <tr>
+                <td>42</td>
+                <td>2A</td>
+                <td>00101010</td>
+                <td>*</td>
+                <td>Shift+8</td>
+                <td>Asterisk</td>
+            </tr>
+    
+            <tr>
+                <td>43</td>
+                <td>2B</td>
+                <td>00101011</td>
+                <td>+</td>
+                <td>Shift+=</td>
+                <td>Plus sign</td>
+            </tr>
+    
+            <tr>
+                <td>44</td>
+                <td>2C</td>
+                <td>00101100</td>
+                <td></td>
+                <td></td>
+                <td>Comma</td>
+            </tr>
+    
+            <tr>
+                <td>45</td>
+                <td>2D</td>
+                <td>00101101</td>
+                <td>-</td>
+                <td>-</td>
+                <td>Hyphen-minus (dash)</td>
+            </tr>
+    
+            <tr>
+                <td>46</td>
+                <td>2E</td>
+                <td>00101110</td>
+                <td>.</td>
+                <td>.</td>
+                <td>Full stop (period)</td>
+            </tr>
+    
+            <tr>
+                <td>47</td>
+                <td>2F</td>
+                <td>00101111</td>
+                <td>/</td>
+                <td>/</td>
+                <td>Solidus (slash)</td>
+            </tr>
+    
+            <tr>
+                <td>48</td>
+                <td>30</td>
+                <td>00110000</td>
+                <td>0</td>
+                <td>0</td>
+                <td>Digit zero</td>
+            </tr>
+    
+            <tr>
+                <td>49</td>
+                <td>31</td>
+                <td>00110001</td>
+                <td>1</td>
+                <td>1</td>
+                <td>Digit one</td>
+            </tr>
+    
+            <tr>
+                <td>50</td>
+                <td>32</td>
+                <td>00110010</td>
+                <td>2</td>
+                <td>2</td>
+                <td>Digit two</td>
+            </tr>
+    
+            <tr>
+                <td>51</td>
+                <td>33</td>
+                <td>00110011</td>
+                <td>3</td>
+                <td>3</td>
+                <td>Digit three</td>
+            </tr>
+    
+            <tr>
+                <td>52</td>
+                <td>34</td>
+                <td>00110100</td>
+                <td>4</td>
+                <td>4</td>
+                <td>Digit four</td>
+            </tr>
+    
+            <tr>
+                <td>53</td>
+                <td>35</td>
+                <td>00110101</td>
+                <td>5</td>
+                <td>5</td>
+                <td>Digit five</td>
+            </tr>
+    
+            <tr>
+                <td>54</td>
+                <td>36</td>
+                <td>00110110</td>
+                <td>6</td>
+                <td>6</td>
+                <td>Digit six</td>
+            </tr>
+    
+            <tr>
+                <td>55</td>
+                <td>37</td>
+                <td>00110111</td>
+                <td>7</td>
+                <td>7</td>
+                <td>Digit seven</td>
+            </tr>
+    
+            <tr>
+                <td>56</td>
+                <td>38</td>
+                <td>00111000</td>
+                <td>8</td>
+                <td>8</td>
+                <td>Digit eight</td>
+            </tr>
+    
+            <tr>
+                <td>57</td>
+                <td>39</td>
+                <td>00111001</td>
+                <td>9</td>
+                <td>9</td>
+                <td>Digit nine</td>
+            </tr>
+    
+            <tr>
+                <td>58</td>
+                <td>3A</td>
+                <td>00111010</td>
+                <td>:</td>
+                <td>Shift+;</td>
+                <td>Colon</td>
+            </tr>
+    
+            <tr>
+                <td>59</td>
+                <td>3B</td>
+                <td>00111011</td>
+                <td>;</td>
+                <td>;</td>
+                <td>Semicolon</td>
+            </tr>
+    
+            <tr>
+                <td>60</td>
+                <td>3C</td>
+                <td>00111100</td>
+                <td><</td>
+                <td>Shift+</td>
+                <td>Less-than sign</td>
+            </tr>
+    
+            <tr>
+                <td>61</td>
+                <td>3D</td>
+                <td>00111101</td>
+                <td>=</td>
+                <td>=</td>
+                <td>Equals sign</td>
+            </tr>
+    
+            <tr>
+                <td>62</td>
+                <td>3E</td>
+                <td>00111110</td>
+                <td>></td>
+                <td>Shift+.</td>
+                <td>Greater-than sign</td>
+            </tr>
+    
+            <tr>
+                <td>63</td>
+                <td>3F</td>
+                <td>00111111</td>
+                <td>?</td>
+                <td>Shift+/</td>
+                <td>Question mark</td>
+            </tr>
+    
+            <tr>
+                <td>64</td>
+                <td>40</td>
+                <td>01000000</td>
+                <td>@</td>
+                <td>Shift+2</td>
+                <td>Commercial at</td>
+            </tr>
+    
+            <tr>
+                <td>65</td>
+                <td>41</td>
+                <td>01000001</td>
+                <td>A</td>
+                <td>Shift+A or Caps Lock + A</td>
+                <td>Uppercase A</td>
+            </tr>
+    
+            <tr>
+                <td>66</td>
+                <td>42</td>
+                <td>01000010</td>
+                <td>B</td>
+                <td>Shift+B or Caps Lock + B</td>
+                <td>Uppercase B</td>
+            </tr>
+    
+            <tr>
+                <td>67</td>
+                <td>43</td>
+                <td>01000011</td>
+                <td>C</td>
+                <td>Shift+C or Caps Lock + C</td>
+                <td>Uppercase C</td>
+            </tr>
+    
+            <tr>
+                <td>68</td>
+                <td>44</td>
+                <td>01000100</td>
+                <td>D</td>
+                <td>Shift+D or Caps Lock + D</td>
+                <td>Uppercase D</td>
+            </tr>
+    
+            <tr>
+                <td>69</td>
+                <td>45</td>
+                <td>01000101</td>
+                <td>E</td>
+                <td>Shift+E or Caps Lock + E</td>
+                <td>Uppercase E</td>
+            </tr>
+    
+            <tr>
+                <td>70</td>
+                <td>46</td>
+                <td>01000110</td>
+                <td>F</td>
+                <td>Shift+F or Caps Lock + F</td>
+                <td>Uppercase F</td>
+            </tr>
+    
+            <tr>
+                <td>71</td>
+                <td>47</td>
+                <td>01000111</td>
+                <td>G</td>
+                <td>Shift+G or Caps Lock + G</td>
+                <td>Uppercase G</td>
+            </tr>
+    
+            <tr>
+                <td>72</td>
+                <td>48</td>
+                <td>01001000</td>
+                <td>H</td>
+                <td>Shift+H or Caps Lock + H</td>
+                <td>Uppercase H</td>
+            </tr>
+    
+            <tr>
+                <td>73</td>
+                <td>49</td>
+                <td>01001001</td>
+                <td>I</td>
+                <td>Shift+I or Caps Lock + I</td>
+                <td>Uppercase I</td>
+            </tr>
+    
+            <tr>
+                <td>74</td>
+                <td>4A</td>
+                <td>01001010</td>
+                <td>J</td>
+                <td>Shift+J or Caps Lock + J</td>
+                <td>Uppercase J</td>
+            </tr>
+    
+            <tr>
+                <td>75</td>
+                <td>4B</td>
+                <td>01001011</td>
+                <td>K</td>
+                <td>Shift+K or Caps Lock + K</td>
+                <td>Uppercase K</td>
+            </tr>
+    
+            <tr>
+                <td>76</td>
+                <td>4C</td>
+                <td>01001100</td>
+                <td>L</td>
+                <td>Shift+L or Caps Lock + L</td>
+                <td>Uppercase L</td>
+            </tr>
+    
+            <tr>
+                <td>77</td>
+                <td>4D</td>
+                <td>01001101</td>
+                <td>M</td>
+                <td>Shift+M or Caps Lock + M</td>
+                <td>Uppercase M</td>
+            </tr>
+    
+            <tr>
+                <td>78</td>
+                <td>4E</td>
+                <td>01001110</td>
+                <td>N</td>
+                <td>Shift+N or Caps Lock + N</td>
+                <td>Uppercase N</td>
+            </tr>
+    
+            <tr>
+                <td>79</td>
+                <td>4F</td>
+                <td>01001111</td>
+                <td>O</td>
+                <td>Shift+O or Caps Lock + O</td>
+                <td>Uppercase O</td>
+            </tr>
+    
+            <tr>
+                <td>80</td>
+                <td>50</td>
+                <td>01010000</td>
+                <td>P</td>
+                <td>Shift+P or Caps Lock + P</td>
+                <td>Uppercase P</td>
+            </tr>
+    
+            <tr>
+                <td>81</td>
+                <td>51</td>
+                <td>01010001</td>
+                <td>Q</td>
+                <td>Shift+Q or Caps Lock + Q</td>
+                <td>Uppercase Q</td>
+            </tr>
+    
+            <tr>
+                <td>82</td>
+                <td>52</td>
+                <td>01010010</td>
+                <td>R</td>
+                <td>Shift+R or Caps Lock + R</td>
+                <td>Uppercase R</td>
+            </tr>
+    
+            <tr>
+                <td>83</td>
+                <td>53</td>
+                <td>01010011</td>
+                <td>S</td>
+                <td>Shift+S or Caps Lock + S</td>
+                <td>Uppercase S</td>
+            </tr>
+    
+            <tr>
+                <td>84</td>
+                <td>54</td>
+                <td>01010100</td>
+                <td>T</td>
+                <td>Shift+T or Caps Lock + T</td>
+                <td>Uppercase T</td>
+            </tr>
+    
+            <tr>
+                <td>85</td>
+                <td>55</td>
+                <td>01010101</td>
+                <td>U</td>
+                <td>Shift+U or Caps Lock + U</td>
+                <td>Uppercase U</td>
+            </tr>
+    
+            <tr>
+                <td>86</td>
+                <td>56</td>
+                <td>01010110</td>
+                <td>V</td>
+                <td>Shift+V or Caps Lock + V</td>
+                <td>Uppercase V</td>
+            </tr>
+    
+            <tr>
+                <td>87</td>
+                <td>57</td>
+                <td>01010111</td>
+                <td>W</td>
+                <td>Shift+W or Caps Lock + W</td>
+                <td>Uppercase W</td>
+            </tr>
+    
+            <tr>
+                <td>88</td>
+                <td>58</td>
+                <td>01011000</td>
+                <td>X</td>
+                <td>Shift+X or Caps Lock + X</td>
+                <td>Uppercase X</td>
+            </tr>
+    
+            <tr>
+                <td>89</td>
+                <td>59</td>
+                <td>01011001</td>
+                <td>Y</td>
+                <td>Shift+Y or Caps Lock + Y</td>
+                <td>Uppercase Y</td>
+            </tr>
+    
+            <tr>
+                <td>90</td>
+                <td>5A</td>
+                <td>01011010</td>
+                <td>Z</td>
+                <td>Shift+Z or Caps Lock + Z</td>
+                <td>Uppercase Z</td>
+            </tr>
+    
+            <tr>
+                <td>91</td>
+                <td>5B</td>
+                <td>01011011</td>
+                <td>[</td>
+                <td>[</td>
+                <td>Left square bracket</td>
+            </tr>
+    
+            <tr>
+                <td>92</td>
+                <td>5C</td>
+                <td>01011100</td>
+                <td>\</td>
+                <td>Shift+\</td>
+                <td>Reverse solidus (backslash)</td>
+            </tr>
+    
+            <tr>
+                <td>93</td>
+                <td>5D</td>
+                <td>01011101</td>
+                <td>]</td>
+                <td>]</td>
+                <td>Right square bracket</td>
+            </tr>
+    
+            <tr>
+                <td>94</td>
+                <td>5E</td>
+                <td>01011110</td>
+                <td>^</td>
+                <td>Shift+6</td>
+                <td>Circumflex accent</td>
+            </tr>
+    
+            <tr>
+                <td>95</td>
+                <td>5F</td>
+                <td>01011111</td>
+                <td>_</td>
+                <td>Shift+-</td>
+                <td>Low line (underscore)</td>
+            </tr>
+    
+            <tr>
+                <td>96</td>
+                <td>60</td>
+                <td>01100000</td>
+                <td>`</td>
+                <td>~</td>
+                <td>Grave accent</td>
+            </tr>
+    
+            <tr>
+                <td>97</td>
+                <td>61</td>
+                <td>01100001</td>
+                <td>a</td>
+                <td>a</td>
+                <td>Lowercase a</td>
+            </tr>
+    
+            <tr>
+                <td>98</td>
+                <td>62</td>
+                <td>01100010</td>
+                <td>b</td>
+                <td>b</td>
+                <td>Lowercase b</td>
+            </tr>
+    
+            <tr>
+                <td>99</td>
+                <td>63</td>
+                <td>01100011</td>
+                <td>c</td>
+                <td>c</td>
+                <td>Lowercase c</td>
+            </tr>
+    
+            <tr>
+                <td>100</td>
+                <td>64</td>
+                <td>01100100</td>
+                <td>d</td>
+                <td>d</td>
+                <td>Lowercase d</td>
+            </tr>
+    
+            <tr>
+                <td>101</td>
+                <td>65</td>
+                <td>01100101</td>
+                <td>e</td>
+                <td>e</td>
+                <td>Lowercase e</td>
+            </tr>
+    
+            <tr>
+                <td>102</td>
+                <td>66</td>
+                <td>01100110</td>
+                <td>f</td>
+                <td>f</td>
+                <td>Lowercase f</td>
+            </tr>
+    
+            <tr>
+                <td>103</td>
+                <td>67</td>
+                <td>01100111</td>
+                <td>g</td>
+                <td>g</td>
+                <td>Lowercase g</td>
+            </tr>
+    
+            <tr>
+                <td>104</td>
+                <td>68</td>
+                <td>01101000</td>
+                <td>h</td>
+                <td>h</td>
+                <td>Lowercase h</td>
+            </tr>
+    
+            <tr>
+                <td>105</td>
+                <td>69</td>
+                <td>01101001</td>
+                <td>i</td>
+                <td>i</td>
+                <td>Lowercase i</td>
+            </tr>
+    
+            <tr>
+                <td>106</td>
+                <td>6A</td>
+                <td>01101010</td>
+                <td>j</td>
+                <td>j</td>
+                <td>Lowercase j</td>
+            </tr>
+    
+            <tr>
+                <td>107</td>
+                <td>6B</td>
+                <td>01101011</td>
+                <td>k</td>
+                <td>k</td>
+                <td>Lowercase k</td>
+            </tr>
+    
+            <tr>
+                <td>108</td>
+                <td>6C</td>
+                <td>01101100</td>
+                <td>l</td>
+                <td>l</td>
+                <td>Lowercase l</td>
+            </tr>
+    
+            <tr>
+                <td>109</td>
+                <td>6D</td>
+                <td>01101101</td>
+                <td>m</td>
+                <td>m</td>
+                <td>Lowercase m</td>
+            </tr>
+    
+            <tr>
+                <td>110</td>
+                <td>6E</td>
+                <td>01101110</td>
+                <td>n</td>
+                <td>n</td>
+                <td>Lowercase n</td>
+            </tr>
+    
+            <tr>
+                <td>111</td>
+                <td>6F</td>
+                <td>01101111</td>
+                <td>o</td>
+                <td>o</td>
+                <td>Lowercase o</td>
+            </tr>
+    
+            <tr>
+                <td>112</td>
+                <td>70</td>
+                <td>01110000</td>
+                <td>p</td>
+                <td>p</td>
+                <td>Lowercase p</td>
+            </tr>
+    
+            <tr>
+                <td>113</td>
+                <td>71</td>
+                <td>01110001</td>
+                <td>q</td>
+                <td>q</td>
+                <td>Lowercase q</td>
+            </tr>
+    
+            <tr>
+                <td>114</td>
+                <td>72</td>
+                <td>01110010</td>
+                <td>r</td>
+                <td>r</td>
+                <td>Lowercase r</td>
+            </tr>
+    
+            <tr>
+                <td>115</td>
+                <td>73</td>
+                <td>01110011</td>
+                <td>s</td>
+                <td>s</td>
+                <td>Lowercase s</td>
+            </tr>
+    
+            <tr>
+                <td>116</td>
+                <td>74</td>
+                <td>01110100</td>
+                <td>t</td>
+                <td>t</td>
+                <td>Lowercase t</td>
+            </tr>
+    
+            <tr>
+                <td>117</td>
+                <td>75</td>
+                <td>01110101</td>
+                <td>u</td>
+                <td>u</td>
+                <td>Lowercase u</td>
+            </tr>
+    
+            <tr>
+                <td>118</td>
+                <td>76</td>
+                <td>01110110</td>
+                <td>v</td>
+                <td>v</td>
+                <td>Lowercase v</td>
+            </tr>
+    
+            <tr>
+                <td>119</td>
+                <td>77</td>
+                <td>01110111</td>
+                <td>w</td>
+                <td>w</td>
+                <td>Lowercase w</td>
+            </tr>
+    
+            <tr>
+                <td>120</td>
+                <td>78</td>
+                <td>01111000</td>
+                <td>x</td>
+                <td>x</td>
+                <td>Lowercase x</td>
+            </tr>
+    
+            <tr>
+                <td>121</td>
+                <td>79</td>
+                <td>01111001</td>
+                <td>y</td>
+                <td>y</td>
+                <td>Lowercase y</td>
+            </tr>
+    
+            <tr>
+                <td>122</td>
+                <td>7A</td>
+                <td>01111010</td>
+                <td>z</td>
+                <td>z</td>
+                <td>Lowercase z</td>
+            </tr>
+    
+            <tr>
+                <td>123</td>
+                <td>7B</td>
+                <td>01111011</td>
+                <td>{</td>
+                <td>Shift+[</td>
+                <td>Left curly brace</td>
+            </tr>
+    
+            <tr>
+                <td>124</td>
+                <td>7C</td>
+                <td>01111100</td>
+                <td>|</td>
+                <td>Shift+\</td>
+                <td>Vertical bar</td>
+            </tr>
+    
+            <tr>
+                <td>125</td>
+                <td>7D</td>
+                <td>01111101</td>
+                <td>}</td>
+                <td>Shift+]</td>
+                <td>Right curly brace</td>
+            </tr>
+    
+            <tr>
+                <td>126</td>
+                <td>7E</td>
+                <td>01111110</td>
+                <td>~</td>
+                <td>Shift+`</td>
+                <td>Tilde</td>
+            </tr>
+    
+            <tr>
+                <td>127</td>
+                <td>7F</td>
+                <td>01111111</td>
+                <td>DEL</td>
+                <td><0x7F></td>
+                <td>Delete</td>
+            </tr>
+    
+            <tr>
+                <td>128</td>
+                <td>80</td>
+                <td>10000000</td>
+                <td>Ç</td>
+                <td><Alt>+0199</td>
+                <td>Uppercase C with cedilla</td>
+            </tr>
+    
+            <tr>
+                <td>129</td>
+                <td>81</td>
+                <td>10000001</td>
+                <td>ü</td>
+                <td><Alt>+0252</td>
+                <td>Lowercase u with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>130</td>
+                <td>82</td>
+                <td>10000010</td>
+                <td>é</td>
+                <td><Alt>+0233</td>
+                <td>Lowercase e with acute</td>
+            </tr>
+    
+            <tr>
+                <td>131</td>
+                <td>83</td>
+                <td>10000011</td>
+                <td>â</td>
+                <td><Alt>+0226</td>
+                <td>Lowercase a with circumflex</td>
+            </tr>
+    
+            <tr>
+                <td>132</td>
+                <td>84</td>
+                <td>10000100</td>
+                <td>ä</td>
+                <td><Alt>+0228</td>
+                <td>Lowercase a with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>133</td>
+                <td>85</td>
+                <td>10000101</td>
+                <td>à</td>
+                <td><Alt>+0224</td>
+                <td>Lowercase a with grave</td>
+            </tr>
+    
+            <tr>
+                <td>134</td>
+                <td>86</td>
+                <td>10000110</td>
+                <td>å</td>
+                <td><Alt>+0229</td>
+                <td>Lowercase a with ring above</td>
+            </tr>
+    
+            <tr>
+                <td>135</td>
+                <td>87</td>
+                <td>10000111</td>
+                <td>ç</td>
+                <td><Alt>+0231</td>
+                <td>Lowercase c with cedilla</td>
+            </tr>
+    
+            <tr>
+                <td>136</td>
+                <td>88</td>
+                <td>10001000</td>
+                <td>ê</td>
+                <td><Alt>+0234</td>
+                <td>Lowercase e with circumflex</td>
+            </tr>
+    
+            <tr>
+                <td>137</td>
+                <td>89</td>
+                <td>10001001</td>
+                <td>ë</td>
+                <td><Alt>+0235</td>
+                <td>Lowercase e with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>138</td>
+                <td>8A</td>
+                <td>10001010</td>
+                <td>è</td>
+                <td><Alt>+0232</td>
+                <td>Lowercase e with grave</td>
+            </tr>
+    
+            <tr>
+                <td>139</td>
+                <td>8B</td>
+                <td>10001011</td>
+                <td>ï</td>
+                <td><Alt>+0239</td>
+                <td>Lowercase i with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>140</td>
+                <td>8C</td>
+                <td>10001100</td>
+                <td>î</td>
+                <td><Alt>+0238</td>
+                <td>Lowercase i with circumflex</td>
+            </tr>
+    
+            <tr>
+                <td>141</td>
+                <td>8D</td>
+                <td>10001101</td>
+                <td>ì</td>
+                <td><Alt>+0236</td>
+                <td>Lowercase i with grave</td>
+            </tr>
+    
+            <tr>
+                <td>142</td>
+                <td>8E</td>
+                <td>10001110</td>
+                <td>Ä</td>
+                <td><Alt>+0196</td>
+                <td>Uppercase A with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>143</td>
+                <td>8F</td>
+                <td>10001111</td>
+                <td>Å</td>
+                <td><Alt>+0197</td>
+                <td>Uppercase A with ring above</td>
+            </tr>
+    
+            <tr>
+                <td>144</td>
+                <td>90</td>
+                <td>10010000</td>
+                <td>É</td>
+                <td><Alt>+0201</td>
+                <td>Uppercase E with acute</td>
+            </tr>
+    
+            <tr>
+                <td>145</td>
+                <td>91</td>
+                <td>10010001</td>
+                <td>æ</td>
+                <td><Alt>+0230</td>
+                <td>Lowercase ae ligature</td>
+            </tr>
+    
+            <tr>
+                <td>146</td>
+                <td>92</td>
+                <td>10010010</td>
+                <td>Æ</td>
+                <td><Alt>+0198</td>
+                <td>Uppercase AE ligature</td>
+            </tr>
+    
+            <tr>
+                <td>147</td>
+                <td>93</td>
+                <td>10010011</td>
+                <td>ô</td>
+                <td><Alt>+0244</td>
+                <td>Lowercase o with circumflex</td>
+            </tr>
+    
+            <tr>
+                <td>148</td>
+                <td>94</td>
+                <td>10010100</td>
+                <td>ö</td>
+                <td><Alt>+0246</td>
+                <td>Lowercase o with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>149</td>
+                <td>95</td>
+                <td>10010101</td>
+                <td>ò</td>
+                <td><Alt>+0242</td>
+                <td>Lowercase o with grave</td>
+            </tr>
+    
+            <tr>
+                <td>150</td>
+                <td>96</td>
+                <td>10010110</td>
+                <td>û</td>
+                <td><Alt>+0251</td>
+                <td>Lowercase u with circumflex</td>
+            </tr>
+    
+            <tr>
+                <td>151</td>
+                <td>97</td>
+                <td>10010111</td>
+                <td>ù</td>
+                <td><Alt>+0249</td>
+                <td>Lowercase u with grave</td>
+            </tr>
+    
+            <tr>
+                <td>152</td>
+                <td>98</td>
+                <td>10011000</td>
+                <td>ÿ</td>
+                <td><Alt>+0255</td>
+                <td>Lowercase y with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>153</td>
+                <td>99</td>
+                <td>10011001</td>
+                <td>Ö</td>
+                <td><Alt>+0214</td>
+                <td>Uppercase O with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>154</td>
+                <td>9A</td>
+                <td>10011010</td>
+                <td>Ü</td>
+                <td><Alt>+0220</td>
+                <td>Uppercase U with umlaut</td>
+            </tr>
+    
+            <tr>
+                <td>155</td>
+                <td>9B</td>
+                <td>10011011</td>
+                <td>ø</td>
+                <td><Alt>+0248</td>
+                <td>Lowercase o with stroke</td>
+            </tr>
+    
+            <tr>
+                <td>156</td>
+                <td>9C</td>
+                <td>1001110</td>
+                <td>None</td>
+                <td>None</td>
+                <td>None</td>
+            </tr>
+    
+        </tbody>
+    </table>
+
+    <script>
+        function searchTable() {
+            const input = document.getElementById("searchInput").value.toLowerCase();
+            const rows = document.querySelectorAll("#lookupTable tbody tr");
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(input) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>

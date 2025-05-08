@@ -1,141 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<title>Camera Field of View</title>
-		<style>
-			body {
-				margin: 0;
-				background: #f0f0f0;
-				font-family: sans-serif;
-			}
-			canvas {
-				display: block;
-				background: #ffffff;
-				border: 2px solid #333;
-				margin: 20px auto;
-			}
-			#info {
-				text-align: center;
-				margin-top: -10px;
-			}
-		</style>
-	</head>
-	<body>
-		<canvas
-			id="viewCanvas"
-			width="800"
-			height="600"
-		></canvas>
-		<div id="info">
-			Use arrow keys or mouse drag to control pan (←→) and tilt (↑↓)
-		</div>
+<html>
+<head>
+<title>Cool Index Page</title>
+<link rel="stylesheet" href="style.css">
+<style>
 
-		<script>
-			const canvas = document.getElementById("viewCanvas");
-			const ctx = canvas.getContext("2d");
+h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 { text-align: center; margin-bottom: 20px; }
+        h2 { border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 30px; }
+        h3 { margin-top: 20px; color: #34495e; }
 
-			let pan = 0; // Horizontal angle (0 to 350)
-			let tilt = 0; // Vertical angle (-50 to +50, total 100°)
+.button-container {
+  display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+    padding: 10px;
+  /*height: 100vh;  Full viewport height */
+}
+.cool-button {
+  background-color: #616162;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer; /* Indicate it's a link */
+}
 
-			const maxPan = 350;
-			const minTilt = -50;
-			const maxTilt = 50;
+.cool-button:hover {
+  background-color: #00a99d;
+  color: black
+}
+</style>
+</head>
+<body>
+    <section>
+        <div class="h1">
+            
+            <h1>AB3 Playground and Learning</h1>
 
-			let dragging = false;
-			let lastX = 0;
-			let lastY = 0;
-
-			function drawView() {
-				ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-				// Draw "house" (top-down view, camera on left side)
-				ctx.fillStyle = "#aaa";
-				ctx.fillRect(300, 200, 200, 200);
-
-				// Camera position (left side of house)
-				const camX = 300;
-				const camY = 300;
-
-				// Draw camera mount
-				ctx.fillStyle = "#333";
-				ctx.beginPath();
-				ctx.arc(camX, camY, 8, 0, Math.PI * 2);
-				ctx.fill();
-
-				// Calculate field of view
-				const fovAngle = 60; // 60° visual cone
-				const radius = 180;
-				const startAngle = ((pan - fovAngle / 2) * Math.PI) / 180;
-				const endAngle = ((pan + fovAngle / 2) * Math.PI) / 180;
-
-				ctx.fillStyle = "rgba(0, 150, 255, 0.2)";
-				ctx.beginPath();
-				ctx.moveTo(camX, camY);
-				ctx.arc(camX, camY, radius, startAngle, endAngle);
-				ctx.closePath();
-				ctx.fill();
-
-				// Show pan/tilt
-				ctx.fillStyle = "#000";
-				ctx.font = "16px Arial";
-				ctx.fillText(`Pan: ${pan}°`, 10, 20);
-				ctx.fillText(`Tilt: ${tilt}°`, 10, 40);
-			}
-
-			function updatePanTilt(dx, dy) {
-				pan += dx;
-				tilt += dy;
-
-				if (pan < 0) pan += 360;
-				if (pan > maxPan) pan -= 360;
-				tilt = Math.max(minTilt, Math.min(maxTilt, tilt));
-
-				drawView();
-			}
-
-			// Mouse drag handling
-			canvas.addEventListener("mousedown", (e) => {
-				dragging = true;
-				lastX = e.clientX;
-				lastY = e.clientY;
-			});
-
-			canvas.addEventListener("mouseup", () => (dragging = false));
-			canvas.addEventListener("mouseleave", () => (dragging = false));
-
-			canvas.addEventListener("mousemove", (e) => {
-				if (!dragging) return;
-				const dx = e.clientX - lastX;
-				const dy = e.clientY - lastY;
-				lastX = e.clientX;
-				lastY = e.clientY;
-				updatePanTilt(dx * 0.5, dy * -0.3); // Adjust sensitivity
-			});
-
-			// Arrow key handling
-			window.addEventListener("keydown", (e) => {
-				switch (e.key) {
-					case "ArrowLeft":
-						updatePanTilt(-5, 0);
-						break;
-					case "ArrowRight":
-						updatePanTilt(5, 0);
-						break;
-					case "ArrowUp":
-						updatePanTilt(0, 2);
-						break;
-					case "ArrowDown":
-						updatePanTilt(0, -2);
-						break;
-				}
-			});
-
-			drawView();
-		</script>
-	</body>
+        </div>
+    </section>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+<div class="button-container">
+<a href="abanagram.html" class="cool-button">Make an Anagram</a>
+<a href="asciilookup.html" class="cool-button">ascii lookup</a>
+<a href="learnCrytography.html" class="cool-button">Leaarn Cryptography</a>
+<a href="SCFOV.html" class="cool-button">Security Camera Field of View</a>
+<a href="ragfromscratch.html" class="cool-button">RAG from Scratch</a>
+<a href="machinelearningconcepts.html" class="cool-button">ML Concepts</a>
+<a href="holtscrollingtext.html" class="cool-button">Holtman</a>
+</div>
+</body>
 </html>
